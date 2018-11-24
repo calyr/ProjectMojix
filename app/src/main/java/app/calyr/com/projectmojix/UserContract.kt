@@ -6,14 +6,14 @@ import android.text.TextUtils
 
 data class User( val name: String? = null, val address: String? = null, val birthDate: String? = null, val phoneNumber: String? = null, val email: String? = null )
 
-class UserContract {
+class ContractUser {
     interface Presenter {
         fun saveUser(user:User)
 
     }
 
     interface ViewUser {
-        fun SaveUser(user:User)
+        fun saveUser(user:User)
         fun showErrorName(message:String)
         fun showErrorAddress(message:String)
         fun showErrorPhoneNumber(message: String)
@@ -114,3 +114,4 @@ class UserContract {
 
 
 }
+
