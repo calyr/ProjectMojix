@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">ProjectMojix</string>
+
+
+    <!--VIEW USER-->
+    <string name="form_user_title">Creacion de Usuario</string>
+    <string name="form_user_name">Nombre</string>
+    <string name="form_user_address">Dirección</string>
+    <string name="form_user_birthDate">Fecha de Nacimiento</string>
+    <string name="form_user_phone_number">Teléfono</string>
+    <string name="form_user_email">Correo Electronico</string>
+    <string name="form_user_btn_save">Guardar</string>
+
+</resources>

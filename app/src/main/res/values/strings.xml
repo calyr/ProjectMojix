@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">ProjectMojix</string>
+
+
+    <!--FORM USER-->
+    <string name="form_user_title">Create User</string>
+    <string name="form_user_name">Name</string>
+    <string name="form_user_address">Address</string>
+    <string name="form_user_birthDate">BirthDate</string>
+    <string name="form_user_phone_number">Phone Number</string>
+    <string name="form_user_email">Email</string>
+    <string name="form_user_btn_save">Save</string>
+
+    <!--FORM USER ERROR-->
+    <string name="form_empty">This value should not be blank</string>
 </resources>
