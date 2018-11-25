@@ -6,7 +6,7 @@ import android.text.TextUtils
 
 data class User( val name: String? = null, val address: String? = null, val birthDate: String? = null, val phoneNumber: String? = null, val email: String? = null )
 
-class ContractUser {
+class UserContract {
     interface Presenter {
         fun saveUser(user:User)
 

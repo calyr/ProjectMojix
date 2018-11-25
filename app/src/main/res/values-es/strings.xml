@@ -11,4 +11,7 @@
     <string name="form_user_email">Correo Electronico</string>
     <string name="form_user_btn_save">Guardar</string>
 
+    <!--FORM USER ERROR-->
+    <string name="form_empty">Este valor no debe estar vacio</string>
+
 </resources>

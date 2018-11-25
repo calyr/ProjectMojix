@@ -23,7 +23,7 @@ class UserActivity : AppCompatActivity(), UserContract.ViewUser {
     }
 
 
-    override fun SaveUser(user: User) {
+    override fun saveUser(user: User) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
