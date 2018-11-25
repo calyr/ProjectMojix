@@ -1,10 +1,29 @@
 package app.calyr.com.projectmojix
 
+import android.arch.persistence.room.ColumnInfo
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.PrimaryKey
 import android.content.Context
 import android.text.TextUtils
+import java.util.*
 
-
-data class User( val name: String? = null, val address: String? = null, val birthDate: String? = null, val phoneNumber: String? = null, val email: String? = null )
+@Entity(tableName = "user")
+data class User(
+        @ColumnInfo(name = "id")
+        @PrimaryKey
+        var id: String = "",
+        @ColumnInfo(name = "name")
+        var name: String? = null,
+        @ColumnInfo(name = "address")
+        var address: String? = null,
+        @ColumnInfo(name = "birth_date")
+        var birthDate: String? = null,
+        @ColumnInfo(name = "phone_number")
+        var phoneNumber: String? = null,
+        @ColumnInfo(name = "email")
+        var email: String? = null ) {
+    constructor():this("","", "", "", "")
+}
 
 class UserContract {
     interface Presenter {
@@ -104,6 +123,8 @@ class UserContract {
             }
 
             if (!error) {
+                user.id = UUID.randomUUID().toString()
+                db.getUserDato().insertUser(user)
                 listener.onSuccess()
             }
         }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.row_user.view.*
+import java.util.*
 
 class ListContract {
     interface ListView{
@@ -50,12 +51,8 @@ class ListContract {
     }
 
     class InteractorImpl : ListContract.Interactor {
-
         override fun getList(listener: Interactor.OnListener): ArrayList<User> {
-            val list = arrayListOf<User>()
-            list.add(User("Roberto", "Los Robles 490", "07/07/1986", "70710142", "calyr.software@gmail.com"))
-            list.add(User(name = "Gabriela", birthDate = "12/05/1986", address = "Av. los Robles esq. Tomillo", phoneNumber = "70710142", email = "gabriela.ocsoro@hotmail.com"))
-            return list
+            return db.getUserDato().findByAll() as ArrayList<User>
         }
     }
 }
@@ -75,6 +72,8 @@ class UserListAdapter(val items: ArrayList<User>, val context: Context): Recycle
             val user = items.get(position)
             holder.itemView.cvName.text = user.name
             holder.itemView.cvAddress.text = user.address
+            holder.itemView.cvEmail.text = user.email
+            holder.itemView.cvCellphone.text = user.phoneNumber
         }
 
         class UserListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
