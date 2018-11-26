@@ -3,6 +3,7 @@ package app.calyr.com.projectmojix
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import kotlinx.android.synthetic.main.content_user.*
 import kotlinx.android.synthetic.main.toolbar.*
 
@@ -24,6 +25,9 @@ class UserActivity : AppCompatActivity(), UserContract.ViewUser {
         var userId: String = ""
     }
 
+    override fun showBtnDelete() {
+        btnUserDelete.visibility = View.VISIBLE
+    }
 
     override fun showErrorAddress(message: String) {
         fuserAddress.error = message
@@ -77,6 +81,9 @@ class UserActivity : AppCompatActivity(), UserContract.ViewUser {
             } else {
                 presenterUser.saveUser()
             }
+        }
+        btnUserDelete.setOnClickListener {
+            presenterUser.deleteUser(userId)
         }
     }
 

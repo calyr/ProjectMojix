@@ -33,12 +33,12 @@ class MainActivity : AppCompatActivity(), ListContract.ListView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         init()
 
     }
 
     fun init() {
+        setSupportActionBar(toolbarMain)
         val listPresenter: ListContract.Presenter = ListContract.PresenterImpl(this, this)
         listPresenter.getList()
         btnCreateUser.setOnClickListener {

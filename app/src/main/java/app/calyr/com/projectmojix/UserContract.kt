@@ -6,7 +6,6 @@ import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 import android.content.Context
 import android.text.TextUtils
-import android.util.Log
 import java.util.*
 
 @Entity(tableName = "user")
@@ -32,6 +31,7 @@ class UserContract {
         fun saveUser()
         fun editUser(userId: String)
         fun loadUser(userId: String)
+        fun deleteUser(userId: String)
 
     }
 
@@ -45,6 +45,7 @@ class UserContract {
         fun loadUser( user: User)
         fun navigateToList()
         fun getFormUser(): User
+        fun showBtnDelete()
     }
 
     interface Interactor {
@@ -52,6 +53,7 @@ class UserContract {
         fun save(user:User, listener: OnListener)
         fun edit(user:User, listener: OnListener)
         fun getUser(userId: String, listener: OnListener): User
+        fun deleteUser(userId: String, listener: OnListener)
         interface OnListener {
             fun onSuccess()
             fun onErrorName(errorId:Int)
@@ -69,6 +71,13 @@ class UserContract {
             view.let {
                 val userEdit = interactorUser.getUser(userId, this)
                 view.loadUser(userEdit)
+                view.showBtnDelete()
+            }
+        }
+
+        override fun deleteUser(userId: String) {
+            view.let {
+                interactorUser.deleteUser(userId, this)
             }
         }
 
@@ -127,9 +136,15 @@ class UserContract {
 
     class InteractorImpl : Interactor  {
 
+        override fun deleteUser(userId: String, listener: Interactor.OnListener) {
+            val user = db.getUserDato().findById(userId)
+            db.getUserDato().delelteUser(user)
+            listener.onSuccess()
+
+        }
+
         override fun getUser(userId: String, listener: Interactor.OnListener): User {
             val user = db.getUserDato().findById(userId)
-            Log.d("VER", user.toString())
             return user
         }
 

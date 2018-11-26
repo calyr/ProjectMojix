@@ -13,5 +13,6 @@
 
     <!--FORM USER ERROR-->
     <string name="form_empty">Este valor no debe estar vacio</string>
+    <string name="title_list">User List</string>
 
 </resources>
