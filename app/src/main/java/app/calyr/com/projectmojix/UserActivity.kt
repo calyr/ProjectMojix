@@ -1,11 +1,14 @@
 package app.calyr.com.projectmojix
 
+import android.app.DatePickerDialog
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import kotlinx.android.synthetic.main.content_user.*
 import kotlinx.android.synthetic.main.toolbar.*
+import java.util.*
 
 class UserActivity : AppCompatActivity(), UserContract.ViewUser {
 
@@ -23,6 +26,11 @@ class UserActivity : AppCompatActivity(), UserContract.ViewUser {
     companion object {
         var modeEdit: Boolean = false
         var userId: String = ""
+        var calendar: Calendar = Calendar.getInstance()
+        private var YEAR = calendar.get(Calendar.YEAR)
+        private var MONTH = calendar.get(Calendar.MONTH);
+        private var DAY = calendar.get(Calendar.DAY_OF_MONTH);
+
     }
 
     override fun showBtnDelete() {
@@ -64,6 +72,31 @@ class UserActivity : AppCompatActivity(), UserContract.ViewUser {
         fuserPhoneNumber.setText(user.phoneNumber)
         fuserEmail.setText(user.email)
 
+    }
+
+    fun setDate(view: View) {
+        showDialog(999)
+    }
+
+    override fun onCreateDialog(id: Int): Dialog? {
+        // TODO Auto-generated method stub
+        return if (id == 999) {
+            DatePickerDialog(this,
+                    myDateListener, YEAR, MONTH, DAY)
+        } else null
+    }
+    private val myDateListener = DatePickerDialog.OnDateSetListener { arg0, arg1, arg2, arg3 ->
+        // TODO Auto-generated method stub
+        // arg1 = year
+        // arg2 = month
+        // arg3 = day
+
+        showDate(arg1, arg2 + 1, arg3)
+    }
+
+    fun showDate(year: Int, month: Int, day: Int) {
+        fuserBirthDate.setText("$day/$month/$year")
+        fuserBirthDate.requestFocus()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
