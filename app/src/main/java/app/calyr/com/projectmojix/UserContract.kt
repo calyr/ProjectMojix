@@ -2,9 +2,11 @@ package app.calyr.com.projectmojix
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 import android.content.Context
 import android.text.TextUtils
+import android.util.Log
 import java.util.*
 
 @Entity(tableName = "user")
@@ -22,30 +24,34 @@ data class User(
         var phoneNumber: String? = null,
         @ColumnInfo(name = "email")
         var email: String? = null ) {
-    constructor():this("","", "", "", "")
+    @Ignore constructor():this("","", "", "", "")
 }
 
 class UserContract {
     interface Presenter {
-        fun saveUser(user:User)
+        fun saveUser()
+        fun editUser(userId: String)
+        fun loadUser(userId: String)
 
     }
 
     interface ViewUser {
-        fun saveUser(user:User)
         fun showErrorName(message:String)
         fun showErrorAddress(message:String)
         fun showErrorPhoneNumber(message: String)
         fun showErrorBirthDate(message: String)
         fun showErrorEmail(message: String)
         fun loading()
+        fun loadUser( user: User)
         fun navigateToList()
+        fun getFormUser(): User
     }
 
     interface Interactor {
 
         fun save(user:User, listener: OnListener)
-
+        fun edit(user:User, listener: OnListener)
+        fun getUser(userId: String, listener: OnListener): User
         interface OnListener {
             fun onSuccess()
             fun onErrorName(errorId:Int)
@@ -53,12 +59,20 @@ class UserContract {
             fun onErrorPhoneNumber(errorId:Int)
             fun onErrorBirthDate(errorId:Int)
             fun onErrorEmail(errorId:Int)
+            fun onLoadUser(user: User)
         }
     }
 
     class PresenterImpl(val context: Context, val view: ViewUser) : Presenter, Interactor.OnListener {
 
-        val interactorUser: Interactor
+        override fun loadUser(userId: String) {
+            view.let {
+                val userEdit = interactorUser.getUser(userId, this)
+                view.loadUser(userEdit)
+            }
+        }
+
+        private val interactorUser: Interactor
         init {
             interactorUser = InteractorImpl()
         }
@@ -88,17 +102,55 @@ class UserContract {
             view.showErrorEmail(context.getString(errorId))
         }
 
-
-
-        override fun saveUser(user: User) {
+        override fun saveUser() {
             view.let {
-                interactorUser.save(user, this)
+                interactorUser.save(view.getFormUser(), this)
             }
         }
+
+        override fun editUser(userId: String) {
+            view.let {
+                val user = view.getFormUser()
+                user.id = userId
+                interactorUser.edit(user, this)
+            }
+        }
+
+        override fun onLoadUser(user: User) {
+            view.let {
+                view.loadUser(user)
+            }
+        }
+
+
     }
 
     class InteractorImpl : Interactor  {
+
+        override fun getUser(userId: String, listener: Interactor.OnListener): User {
+            val user = db.getUserDato().findById(userId)
+            Log.d("VER", user.toString())
+            return user
+        }
+
         override fun save(user: User, listener: Interactor.OnListener) {
+
+
+            if (validateUser(user, listener)) {
+                user.id = UUID.randomUUID().toString()
+                db.getUserDato().insertUser(user)
+                listener.onSuccess()
+            }
+        }
+
+        override fun edit(user: User, listener: Interactor.OnListener) {
+            if (validateUser(user, listener)) {
+                db.getUserDato().editUser(user)
+                listener.onSuccess()
+            }
+        }
+
+        fun validateUser(user:User, listener: Interactor.OnListener) : Boolean {
             var error = false
 
             if (TextUtils.isEmpty(user.name)) {
@@ -121,12 +173,7 @@ class UserContract {
                 error = true
                 listener.onErrorPhoneNumber(R.string.form_empty)
             }
-
-            if (!error) {
-                user.id = UUID.randomUUID().toString()
-                db.getUserDato().insertUser(user)
-                listener.onSuccess()
-            }
+            return !error
         }
 
 

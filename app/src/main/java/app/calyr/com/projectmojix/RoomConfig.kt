@@ -6,7 +6,7 @@ import android.arch.persistence.room.*
 @Dao
 interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUser(user:User): Long
+    fun insertUser(user:User)
 
     @Delete
     fun delelteUser(user:User)
@@ -15,11 +15,14 @@ interface UserDao {
     fun findByAll(): List<User>
 
     @Query("SELECT * FROM User WHERE id = :id")
-    fun findById(id:Long): User
+    fun findById(id:String): User
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    fun editUser(user:User)
 
 }
 
-@Database(entities = arrayOf(User::class), version = 1)
+@Database(entities = arrayOf(User::class), version = 1, exportSchema = false)
 abstract class MyDataBase: RoomDatabase() {
 
     abstract fun getUserDato() : UserDao

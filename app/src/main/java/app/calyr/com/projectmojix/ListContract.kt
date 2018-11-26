@@ -11,7 +11,6 @@ import java.util.*
 class ListContract {
     interface ListView{
         fun setManagerRecyclerView()
-//        fun getList(): ArrayList<User>
         fun setAdapter(list:ArrayList<User>)
         fun showRecyclerView(list:ArrayList<User>)
     }
@@ -57,7 +56,7 @@ class ListContract {
     }
 }
 
-class UserListAdapter(val items: ArrayList<User>, val context: Context): RecyclerView.Adapter<UserListAdapter.UserListViewHolder>() {
+class UserListAdapter(val items: ArrayList<User>, val context: Context, val clickListener : (User) -> Unit): RecyclerView.Adapter<UserListAdapter.UserListViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserListViewHolder {
             val v = LayoutInflater.from(parent.context).inflate(R.layout.row_user, parent, false)
@@ -68,13 +67,23 @@ class UserListAdapter(val items: ArrayList<User>, val context: Context): Recycle
             return items.count()
         }
 
+
+
         override fun onBindViewHolder(holder: UserListViewHolder, position: Int) {
             val user = items.get(position)
             holder.itemView.cvName.text = user.name
             holder.itemView.cvAddress.text = user.address
             holder.itemView.cvEmail.text = user.email
             holder.itemView.cvCellphone.text = user.phoneNumber
+            holder.itemView.cvBirthDate.text = user.birthDate
+            holder.bind(user, clickListener )
         }
 
-        class UserListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
+        class UserListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+            fun bind(user: User, clickListener: (User) -> Unit){
+                itemView.setOnClickListener{
+                    clickListener(user)
+                }
+            }
+        }
     }
